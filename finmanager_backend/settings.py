@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "users.User"
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -154,6 +156,11 @@ REST_AUTH = {
     # 'JWT_AUTH_COOKIE': 'finmanager-auth',
     # 'JWT_AUTH_REFRESH_COOKIE': 'finmanager-refresh-token',
 }
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
