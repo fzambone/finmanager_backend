@@ -21,7 +21,6 @@ class CategorySerializer(serializers.ModelSerializer):
 
     parent_category = SimpleCategorySerializer(read_only=True)
     sub_categories = SimpleCategorySerializer(many=True, read_only=True)
-
     parent_category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(),
         source="parent_category",
@@ -42,3 +41,18 @@ class CategorySerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+    def __init__(self, *args, **kwargs):
+        """
+        Override __init__ method to dynamically filter the queryset for
+        'parent_category_id' based on the request user's group.
+        """
+        super().__init__(*args, **kwargs)
+        request = self.context.get("request", None)
+        if request and hasattr(request, "user") and request.user.is_authenticated:
+            user_group = request.user.family_groups.first()
+            if user_group:
+                parent_queryset = Category.objects.filter(family_group=user_group)
+                self.fields["parent_category_id"].queryset = parent_queryset
+            else:
+                self.fields["parent_category_id"].queryset = Category.objects.none()
