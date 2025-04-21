@@ -38,6 +38,7 @@ class CategorySerializer(serializers.ModelSerializer):
             "parent_category",
             "parent_category_id",
             "sub_categories",
+            "is_default",
             "created_at",
             "updated_at",
         ]
