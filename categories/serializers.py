@@ -42,6 +42,8 @@ class CategorySerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+        read_only_fields = ["family_group"]
+
     def __init__(self, *args, **kwargs):
         """
         Override __init__ method to dynamically filter the queryset for
